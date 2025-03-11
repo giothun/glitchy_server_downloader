@@ -1,6 +1,6 @@
 # Glitchy Server Data Downloader
 
-This command-line tool downloads binary data from a glitchy server that intentionally returns truncated data for each request. It uses HTTP Range requests to piece together the complete file and then verifies its integrity by computing the SHA‑256 hash of the assembled file and comparing it with an expected hash.
+This command-line tool downloads binary data from a glitchy server that returns truncated data for each request. It uses HTTP Range requests to piece together the complete file and then verifies its integrity by computing the SHA‑256 hash of the assembled file and comparing it with an expected hash.
 
 
 #  Usage
@@ -29,7 +29,9 @@ java -jar build/libs/glitchy_server_downloader-1.0-all.jar http://127.0.0.1:8080
 
 # Testing
 
-Unit tests have been provided under `src/test/kotlin/downloader/DownloaderTest.kt.` To run tests using Gradle, execute:
+**NB: I changed host to 0.0.0.0 to be able to test server which running in docker outside of docker**
+
+Unit and integration tests have been provided. To run tests using Gradle, execute:
 ```bash
 ./gradlew test
 ```
