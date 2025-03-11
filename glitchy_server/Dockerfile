@@ -1,0 +1,6 @@
+FROM python:3.10-slim
+ENV PYTHONUNBUFFERED=1
+WORKDIR /app
+COPY . .
+EXPOSE 8080
+CMD ["python", "server.py"]

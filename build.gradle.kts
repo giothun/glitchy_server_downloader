@@ -14,6 +14,9 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.12.0")
+    testImplementation("org.testcontainers:junit-jupiter:1.20.6")
+
 }
 
 tasks.test {
