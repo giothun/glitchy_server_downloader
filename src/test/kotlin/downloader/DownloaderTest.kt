@@ -3,8 +3,17 @@ package downloader
 import java.nio.charset.StandardCharsets
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class DownloaderTest {
+
+    @Test
+    fun testServerNotRunning() {
+        val writer = System.out.writer()
+        assertFailsWith<DownloadException>("Expected exception when connecting to a non-running server") {
+            getExpectedLengthAndInitialChunk("http://127.0.0.1:9999/", 2000, writer)
+        }
+    }
 
     @Test
     fun testSha256WithKnownValue() {
