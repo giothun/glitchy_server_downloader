@@ -5,7 +5,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.test.assertEquals
 
-class CliArgumentsTest {
+class ArgumentsParserTest {
 
     @Test
     fun testValidUrl() {
