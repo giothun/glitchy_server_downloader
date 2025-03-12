@@ -28,10 +28,11 @@ java -jar build/libs/glitchy_server_downloader-1.0-all.jar http://127.0.0.1:8080
 * **expected-hash**: The expected SHA‑256 hash of the complete file. (This is printed by the server on startup.)
 
 # Testing
-
 **NB: I changed host to 0.0.0.0 to be able to test server which running in docker outside of docker**
 
 Unit and integration tests have been provided. To run tests using Gradle, execute:
 ```bash
 ./gradlew test
 ```
+
+CI for Github Actions also provided.

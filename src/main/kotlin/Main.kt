@@ -1,7 +1,7 @@
 import cli.parseArguments
+import cli.writeln
 import downloader.downloadAndVerify
 import downloader.DownloadException
-import downloader.writeln
 
 fun main(args: Array<String>) {
     val out = System.out.writer()

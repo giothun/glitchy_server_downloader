@@ -1,15 +1,11 @@
 package downloader
 
+import cli.writeln
 import java.io.ByteArrayOutputStream
 import java.io.Writer
 import java.net.HttpURLConnection
 import java.security.MessageDigest
 import kotlin.math.min
-
-fun Writer.writeln(message: String) {
-    write(message + "\n")
-    flush()
-}
 
 data class DownloadConfig(
     val chunkSize: Int = 65536,         // 64 KB

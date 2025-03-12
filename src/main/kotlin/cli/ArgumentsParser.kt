@@ -1,8 +1,11 @@
 package cli
 
-import downloader.writeln
 import java.io.Writer
 
+fun Writer.writeln(message: String) {
+    write(message + "\n")
+    flush()
+}
 
 fun printHelp(writer: Writer) {
     writer.writeln("Glitchy Server Data Downloader")
