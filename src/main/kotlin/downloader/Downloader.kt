@@ -25,14 +25,23 @@ fun getExpectedLengthAndInitialChunk(url: String, timeout: Int, progress: Writer
     var connection: HttpURLConnection? = null
     try {
         connection = createConnection(url, "GET", timeout)
+        val responseCode = connection.responseCode
+        progress.writeln("Response code: $responseCode")
+        if (responseCode != 200 && responseCode != 206) {
+            throw DownloadException("Server responded with HTTP code $responseCode.")
+        }
+
         val contentLengthStr = connection.getHeaderField("Content-Length")
-        val expectedLength = contentLengthStr?.toIntOrNull()
-            ?: throw DownloadException("Invalid Content-Length header: $contentLengthStr")
+            ?: throw DownloadException("Server did not return a Content-Length header.")
+
+        val expectedLength = contentLengthStr.toIntOrNull()
+            ?: throw DownloadException("Invalid Content-Length header value: '$contentLengthStr'. Expected a numeric value.")
+
         val initialChunk = connection.inputStream.use { it.readBytes() }
-        progress.writeln("Expected total length: $expectedLength bytes.")
+        progress.writeln("Expected total length: $expectedLength bytes. Initial chunk size: ${initialChunk.size} bytes.")
         return Pair(expectedLength, initialChunk)
     } catch (e: Exception) {
-        throw DownloadException("Failed initial request: ${e.message}", e)
+        throw DownloadException("Failed initial request: ${e.message}.", e)
     } finally {
         connection?.disconnect()
     }
@@ -60,10 +69,13 @@ fun downloadGlitchyFile(
             var conn: HttpURLConnection? = null
             try {
                 conn = createConnection(url, "GET", config.timeout)
-                conn.setRequestProperty("Range", "bytes=$offset-${end}")
+                conn.setRequestProperty("Range", "bytes=$offset-$end")
                 chunk = conn.inputStream.use { it.readBytes() }
-                if (chunk.isNotEmpty()) break
-                else progress.writeln("Received empty chunk at offset $offset, attempt $attempt/${config.maxRetries}.")
+                if (chunk.isNotEmpty()) {
+                    break
+                } else {
+                    progress.writeln("Received empty chunk at offset $offset, attempt $attempt/${config.maxRetries}.")
+                }
             } catch (e: Exception) {
                 progress.writeln("Error downloading chunk at offset $offset, attempt $attempt/${config.maxRetries}: ${e.message}")
             } finally {
@@ -88,7 +100,7 @@ fun downloadGlitchyFile(
 
     val downloaded = output.toByteArray()
     if (downloaded.size != expectedLength) {
-        progress.writeln("Warning: Downloaded size (${downloaded.size}) does not match expected size ($expectedLength).")
+        progress.writeln("Warning: Downloaded size (${downloaded.size}) does not match expected size ($expectedLength). Data may be incomplete.")
     }
     return downloaded
 }
