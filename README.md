@@ -30,6 +30,8 @@ java -jar build/libs/glitchy_server_downloader-1.0-all.jar http://127.0.0.1:8080
 # Testing
 **NB: I changed host to 0.0.0.0 to be able to test server which running in docker outside of docker**
 
+It was possible to use socrat to forward traffic to 127.0.0.1:8080, but the current solution looks nicer in my opinion.
+
 Unit and integration tests have been provided. To run tests using Gradle, execute:
 ```bash
 ./gradlew test
