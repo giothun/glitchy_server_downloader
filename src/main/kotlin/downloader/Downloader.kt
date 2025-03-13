@@ -7,6 +7,9 @@ import java.net.HttpURLConnection
 import java.security.MessageDigest
 import kotlin.math.min
 
+private const val HTTP_OK = 200
+private const val HTTP_PARTIAL_CONTENT = 206
+
 data class DownloadConfig(
     val chunkSize: Int = 65536,         // 64 KB
     val timeout: Int = 5000,            // 5 seconds for connection/read
@@ -27,7 +30,7 @@ fun getExpectedLengthAndInitialChunk(url: String, timeout: Int, progress: Writer
         connection = createConnection(url, "GET", timeout)
         val responseCode = connection.responseCode
         progress.writeln("Response code: $responseCode")
-        if (responseCode != 200 && responseCode != 206) {
+        if (responseCode != HTTP_OK && responseCode != HTTP_PARTIAL_CONTENT) {
             throw DownloadException("Server responded with HTTP code $responseCode.")
         }
 
